@@ -1,8 +1,9 @@
 import { h, render, FunctionalComponent } from "preact";
-import { App } from "./App";
 import { useEffect, useState } from "preact/hooks";
-import { MetaframeObject, MetaframeContext } from "./hooks/metaframeHook";
 import { Metaframe, MetaframeInputMap } from "@metapages/metapage";
+import { ChakraProvider } from "@chakra-ui/react";
+import { MetaframeObject, MetaframeContext } from "./hooks/metaframeHook";
+import { App } from "./App";
 
 // ALL this before the render is to set up the metaframe provider
 // I tried pulling the metaframProvider out into a separate class
@@ -38,7 +39,7 @@ const useMetaframe = () => {
     if (!metaframe) {
       return;
     }
-    const onInputs = (newinputs: MetaframeInputMap) :void => {
+    const onInputs = (newinputs: MetaframeInputMap): void => {
       setInputs(newinputs);
     };
     metaframe.onInputs(onInputs);
@@ -58,7 +59,9 @@ const Index: FunctionalComponent = () => {
   return (
     /* I tried to pull this out into it's own file but preact hates it */
     <MetaframeContext.Provider value={metaframeObject}>
-      <App />
+      <ChakraProvider>
+        <App />
+      </ChakraProvider>
     </MetaframeContext.Provider>
   );
 };

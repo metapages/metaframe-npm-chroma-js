@@ -4,13 +4,9 @@
 		"title": "metaframe-template"
 	},
 	"inputs": {
-		"*": {
-			"type": "application/octet-stream:base64"
-		}
+		"metapage/definition": {}
 	},
     "outputs": {
-		"*": {
-			"type": "application/octet-stream:base64"
-		}
+		"metapage/definition": {}
 	}
 }

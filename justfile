@@ -20,11 +20,6 @@ normal   := '\033[0m'
 _help:
     @just --list --unsorted --list-heading $'🚪 Commands:\n\n'
 
-# Build the client static files
-build: _ensure_npm_modules (_tsc "--build --verbose")
-    rm -rf dist/*
-    {{parcel}} build 'public/index.html' --no-autoinstall --detailed-report 50
-
 # Run the browser dev server (optionally pointing to any remote app)
 dev: _ensure_npm_modules _mkcert (_tsc "--build --verbose")
     #!/usr/bin/env bash
@@ -47,6 +42,15 @@ dev: _ensure_npm_modules _mkcert (_tsc "--build --verbose")
                         --hmr-port ${PORT_HMR} \
                         public/index.html --open
     fi
+
+# deploy to gh-pages branch
+publish: build
+	npm run deploy
+
+# Build the client static files
+build: _ensure_npm_modules (_tsc "--build --verbose")
+    rm -rf dist/*
+    {{parcel}} build 'public/index.html' --no-autoinstall --detailed-report 50
 
 # rebuild the client on changes, but do not serve
 watch:
