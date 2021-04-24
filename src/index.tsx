@@ -6,8 +6,8 @@ import { MetaframeObject, MetaframeContext } from "./hooks/metaframeHook";
 import { App } from "./App";
 
 // ALL this before the render is to set up the metaframe provider
-// I tried pulling the metaframProvider out into a separate class
-// but preact crashed
+// I tried putting useMetaframe into 'metaframeHook.ts'
+// but preact crashed 🤷‍♀️
 const useMetaframe = () => {
   const [metaframeObject, setMetaframeObject] = useState<MetaframeObject>({
     inputs: {},
@@ -19,11 +19,17 @@ const useMetaframe = () => {
 
   useEffect(() => {
     const newMetaframe = new Metaframe();
+    const onInputs = (newinputs: MetaframeInputMap): void => {
+      setInputs(newinputs);
+    };
+    newMetaframe.onInputs(onInputs);
     setMetaframe(newMetaframe);
     return () => {
+      // If the metaframe is cleaned up, also remove the inputs listener
+      newMetaframe.removeListener(Metaframe.INPUTS, onInputs);
       newMetaframe.dispose();
     };
-  }, []);
+  }, [setMetaframe, setInputs]);
 
   useEffect(() => {
     if (inputs && metaframe) {
@@ -34,21 +40,6 @@ const useMetaframe = () => {
       });
     }
   }, [inputs, metaframe]);
-
-  useEffect(() => {
-    if (!metaframe) {
-      return;
-    }
-    const onInputs = (newinputs: MetaframeInputMap): void => {
-      setInputs(newinputs);
-    };
-    metaframe.onInputs(onInputs);
-
-    return () => {
-      // If the metaframe is cleaned up, also remove the inputs listener
-      metaframe.removeListener(Metaframe.INPUTS, onInputs);
-    };
-  }, [metaframe, setInputs]);
 
   return [metaframeObject];
 };

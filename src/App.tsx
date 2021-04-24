@@ -23,15 +23,12 @@ import "ace-builds/src-noconflict/mode-json";
 import "ace-builds/src-noconflict/theme-github";
 
 import {
-  Badge,
   Box,
   Button,
   Code,
   Flex,
-  Heading,
   VStack,
   Spacer,
-  StackDivider,
 } from "@chakra-ui/react";
 import { useMetaframe } from "./hooks/metaframeHook";
 
