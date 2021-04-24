@@ -50,7 +50,7 @@ publish: build
 # Build the client static files
 build: _ensure_npm_modules (_tsc "--build --verbose")
     rm -rf dist/*
-    {{parcel}} build 'public/index.html' --no-autoinstall --detailed-report 50
+    {{parcel}} build 'public/index.html' --public-url ./ --no-autoinstall --detailed-report 50
 
 # rebuild the client on changes, but do not serve
 watch:
