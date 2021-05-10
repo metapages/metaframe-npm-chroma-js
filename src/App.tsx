@@ -51,11 +51,18 @@ export const App: FunctionalComponent = () => {
   const [valueHashParam, setValueHashParam] = useHashParamBase64("text", undefined);
   // Use a local copy because directly using hash params is too slow for typing
   const [ localValue, setLocalValue] = useState<string>(valueHashParam || "");
+  // Send the text at least once, even if the user doesn't click "Send"
+  const [ sendOnce, setSendOnce ] = useState<boolean>(false);
 
+  // source of truth: the URL param #?text=<HashParamBase64>
+  // if that changes, set the local value
+  // the local value changes fast from editing
   useEffect(() => {
     setLocalValue(valueHashParam || "");
   }, [valueHashParam, setLocalValue])
 
+  // make sure the file name is up-to-date
+  // either from #?name=<HashParamBase64> or from the latest input name
   useEffect(() => {
     const key = Object.keys(metaframe.inputs)[0];
     if (key) {
@@ -70,22 +77,20 @@ export const App: FunctionalComponent = () => {
 
   const onSave = useCallback(() => {
     setValueHashParam(localValue);
-    if (metaframe.setOutputs && name) {
-      const newOutputs: any = {};
-      if (name.endsWith(".json")) {
-        try {
-          newOutputs[name] = JSON.parse(localValue || "");
-        } catch (err) {
-          newOutputs[name] = localValue;
-        }
-      } else {
-        newOutputs[name] = localValue;
-      }
-      if (isIframe()) {
-        metaframe.setOutputs(newOutputs);
-      }
+    if (metaframe.setOutputs && name && name.length > 0 && isIframe()) {
+      const newOutputs: any = maybeConvertJsonValues(name, localValue);
+      metaframe.setOutputs(newOutputs);
     }
   }, [metaframe.setOutputs, localValue, name, setValueHashParam]);
+
+  // send current script at least once
+  // useEffect(() => {
+  //   if (metaframe.setOutputs && localValue && localValue.length > 0 && name && name.length > 0 && !sendOnce && isIframe()) {
+  //       const newOutputs: any = maybeConvertJsonValues(name, localValue);
+  //       metaframe.setOutputs(newOutputs);
+  //       setSendOnce(true);
+  //   }
+  // }, [metaframe.setOutputs, localValue, name, sendOnce, setSendOnce]);
 
   return (
     <Box w="100%" p={2} color="white">
@@ -120,3 +125,17 @@ export const App: FunctionalComponent = () => {
     </Box>
   );
 };
+
+const maybeConvertJsonValues = (name:string, text:string) => {
+  const newOutputs: any = {};
+  if (name.endsWith(".json")) {
+    try {
+      newOutputs[name] = JSON.parse(text || "");
+    } catch (err) {
+      newOutputs[name] = text;
+    }
+  } else {
+    newOutputs[name] = text;
+  }
+  return newOutputs;
+}
