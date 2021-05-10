@@ -26,11 +26,11 @@ type OptionType = "string" | "boolean" | "option";
 export type Option = {
   name: string;
   displayName: string;
-  default?: string;
+  default?: string|boolean;
   type?: OptionType; // defaults to string
   options?: string[];
-  validator?: (val: string) => string | undefined; // undefined == 👍, string is an error message
-  map?: (val: string) => any; // convert value to proper type
+  validator?: (val: string|boolean) => string | undefined; // undefined == 👍, string is an error message
+  map?: (val: string|boolean) => any; // convert value to proper type
 };
 
 export const OptionsMenuButton: FunctionalComponent<{ options: Option[] }> = ({
@@ -57,6 +57,8 @@ export const OptionsMenuButton: FunctionalComponent<{ options: Option[] }> = ({
   );
 };
 
+type GenericOptions = Record<string, string|boolean>;
+
 const OptionsMenu: FunctionalComponent<{
   isOpen: boolean;
   setOpen: (open: boolean) => void;
@@ -65,7 +67,7 @@ const OptionsMenu: FunctionalComponent<{
   // isOpen = true; // for debugging/developing
 
   const [optionsInHashParams, setOptionsInHashParams] = useHashParamJson<
-    Record<string, string>
+  GenericOptions
   >(
     "options",
     Object.fromEntries(
@@ -75,7 +77,7 @@ const OptionsMenu: FunctionalComponent<{
     )
   );
 
-  const [localOptions, setLocalOptions] = useState<Record<string, string>>(
+  const [localOptions, setLocalOptions] = useState<GenericOptions>(
     optionsInHashParams || {}
   );
   const [errors, setErrors] = useState<Record<string, string> | undefined>(
@@ -85,7 +87,13 @@ const OptionsMenu: FunctionalComponent<{
   const handleOnChange = useCallback(
     (event: any) => {
       const { name, value } = event.target as HTMLInputElement;
-      setLocalOptions({ ...localOptions, [name]: value });
+      const option = options.find((o) => o.name === name) as Option; // assume we always find one since we configured it from options
+      if (option.type === 'boolean') {
+        setLocalOptions({ ...localOptions, [name]: value === "1" });
+      } else {
+        setLocalOptions({ ...localOptions, [name]: value });
+      }
+
     },
     [localOptions, setLocalOptions]
   );
@@ -99,8 +107,8 @@ const OptionsMenu: FunctionalComponent<{
     const maybeErrors: Record<string, string> = {};
     Object.keys(localOptions).forEach((key) => {
       const option: Option | undefined = options.find((o) => o.name === key);
-      if (option && option.validator) {
-        const errorFromOption = option.validator(localOptions[key]);
+      if (option && option.validator && option.type !== 'boolean') {
+        const errorFromOption = option.validator(localOptions[key] as string);
         if (errorFromOption) {
           maybeErrors[key] = errorFromOption;
         }
@@ -114,7 +122,7 @@ const OptionsMenu: FunctionalComponent<{
 
     // assume valid!
     // now maybe map to other values
-    const convertedOptions: Record<string, any> = {};
+    const convertedOptions: GenericOptions = {};
     Object.keys(localOptions).forEach((key) => {
       const option: Option | undefined = options.find((o) => o.name === key);
       if (option && option.map) {
@@ -246,8 +254,8 @@ const renderInput = (option: Option, value: any, onChange: any) => {
           // @ts-ignore
           rightIcon={<CheckIcon />}
           onChange={onChange}
-          isChecked={value}
-          value={value ? 1 : 0}
+          isChecked={value === true || value === "1"}
+          value={value ? 0 : 1}
         />
       );
     default:

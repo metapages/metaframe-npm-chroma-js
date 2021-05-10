@@ -37,16 +37,29 @@ const appOptions: Option[] = [
     type: "option",
     options: ["json", "javascript", "python", "sh"],
   },
+  {
+    name: "autosend",
+    displayName: "Send once automatically",
+    default: true,
+    type: "boolean",
+  },
 ];
+
+type OptionBlob = {
+  mode:string;
+  autosend:boolean;
+}
 
 export const App: FunctionalComponent = () => {
   const metaframe: MetaframeObject = useMetaframe();
   const [name, setName] = useHashParamBase64("name", "");
   // Proposed way to tell metaframe: I am configuring you
   const [metaframeConfigure] = useHashParam("metaframe-configure");
-  const [options] = useHashParamJson<{ mode: string }>("options", {
+  const [options] = useHashParamJson<OptionBlob>("options", {
     mode: "json",
+    autosend: true,
   });
+
   // Split these next two otherwise editing is too slow as it copies to/from the URL
   const [valueHashParam, setValueHashParam] = useHashParamBase64("text", undefined);
   // Use a local copy because directly using hash params is too slow for typing
@@ -85,12 +98,14 @@ export const App: FunctionalComponent = () => {
 
   // send current script at least once
   useEffect(() => {
-    if (metaframe.setOutputs && localValue && localValue.length > 0 && name && name.length > 0 && !sendOnce && isIframe()) {
+    // don't autosend metapage definitions ugh you get an ugly loop.
+    // configurating it specially is cumbersome
+    if (name !== "metapage/definition" && options?.autosend && metaframe.setOutputs && localValue && localValue.length > 0 && name && name.length > 0 && !sendOnce && isIframe()) {
         const newOutputs: any = maybeConvertJsonValues(name, localValue);
         metaframe.setOutputs(newOutputs);
         setSendOnce(true);
     }
-  }, [metaframe.setOutputs, localValue, name, sendOnce, setSendOnce]);
+  }, [metaframe.setOutputs, localValue, name, sendOnce, setSendOnce, options]);
 
   return (
     <Box w="100%" p={2} color="white">
