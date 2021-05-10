@@ -84,13 +84,13 @@ export const App: FunctionalComponent = () => {
   }, [metaframe.setOutputs, localValue, name, setValueHashParam]);
 
   // send current script at least once
-  // useEffect(() => {
-  //   if (metaframe.setOutputs && localValue && localValue.length > 0 && name && name.length > 0 && !sendOnce && isIframe()) {
-  //       const newOutputs: any = maybeConvertJsonValues(name, localValue);
-  //       metaframe.setOutputs(newOutputs);
-  //       setSendOnce(true);
-  //   }
-  // }, [metaframe.setOutputs, localValue, name, sendOnce, setSendOnce]);
+  useEffect(() => {
+    if (metaframe.setOutputs && localValue && localValue.length > 0 && name && name.length > 0 && !sendOnce && isIframe()) {
+        const newOutputs: any = maybeConvertJsonValues(name, localValue);
+        metaframe.setOutputs(newOutputs);
+        setSendOnce(true);
+    }
+  }, [metaframe.setOutputs, localValue, name, sendOnce, setSendOnce]);
 
   return (
     <Box w="100%" p={2} color="white">
