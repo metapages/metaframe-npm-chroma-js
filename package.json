@@ -1,5 +1,5 @@
 {
-  "name": "metaframe-template",
+  "name": "metaframe-editor",
   "version": "0.1.0",
   "private": false,
   "scripts": {
@@ -9,9 +9,11 @@
   },
   "main": "index.js",
   "dependencies": {
+    "@chakra-ui/icons": "^1.0.13",
     "@chakra-ui/react": "^1.6.0",
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.3.0",
+    "@metapages/metaframe-hook": "^0.2.4",
     "@metapages/metapage": "^0.5.7",
     "ace-builds": "^1.4.12",
     "framer-motion": "^4.1.9",

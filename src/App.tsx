@@ -9,97 +9,112 @@
 
 import { h, FunctionalComponent } from "preact";
 import { useEffect, useState, useCallback } from "preact/hooks";
-import { config } from "ace-builds";
-config.set(
-  "basePath",
-  "https://cdn.jsdelivr.net/npm/ace-builds@1.4.8/src-noconflict/"
-);
-config.setModuleUrl(
-  "ace/mode/json_worker",
-  "https://cdn.jsdelivr.net/npm/ace-builds@1.4.8/src-noconflict/worker-json.js"
-);
-import AceEditor from "react-ace";
-import "ace-builds/src-noconflict/mode-json";
-import "ace-builds/src-noconflict/theme-github";
-
 import {
   Box,
   Button,
-  Code,
   Flex,
-  VStack,
   Spacer,
+  Text,
+  VStack,
 } from "@chakra-ui/react";
-import { useMetaframe } from "./hooks/metaframeHook";
+import {
+  MetaframeObject,
+  useMetaframe,
+  useHashParamJson,
+  useHashParamBase64,
+  useHashParam,
+} from "@metapages/metaframe-hook";
+import { Editor } from "./components/Editor";
+import { Option, OptionsMenuButton } from "./components/OptionsMenu";
+import { EditableText } from "./components/EditableText";
+import { isIframe } from "./utils/util";
+
+const appOptions: Option[] = [
+  {
+    name: "mode",
+    displayName: "Editor code mode",
+    default: "json",
+    type: "option",
+    options: ["json", "javascript", "python", "sh"],
+  },
+];
 
 export const App: FunctionalComponent = () => {
-  const metaframe = useMetaframe();
-  const [value, setValue] = useState<string>("");
-  const [name, setname] = useState<string>("");
+  const metaframe: MetaframeObject = useMetaframe();
+  const [name, setName] = useHashParamBase64("name", "");
+  // Proposed way to tell metaframe: I am configuring you
+  const [metaframeConfigure] = useHashParam("metaframe-configure");
+  const [options] = useHashParamJson<{ mode: string }>("options", {
+    mode: "json",
+  });
+  // Split these next two otherwise editing is too slow as it copies to/from the URL
+  const [valueHashParam, setValueHashParam] = useHashParamBase64("text", undefined);
+  // Use a local copy because directly using hash params is too slow for typing
+  const [ localValue, setLocalValue] = useState<string>(valueHashParam || "");
+
+  useEffect(() => {
+    setLocalValue(valueHashParam || "");
+  }, [valueHashParam, setLocalValue])
 
   useEffect(() => {
     const key = Object.keys(metaframe.inputs)[0];
     if (key) {
       if (typeof metaframe.inputs[key] === "string") {
-        setValue(metaframe.inputs[key]);
+        setValueHashParam(metaframe.inputs[key]);
       } else {
-        setValue(JSON.stringify(metaframe.inputs[key], null, "  "));
+        setValueHashParam(JSON.stringify(metaframe.inputs[key], null, "  "));
       }
-      setname(key);
+      setName(key);
     }
-  }, [metaframe.inputs, setValue, setname]);
+  }, [metaframe.inputs, setValueHashParam, setName]);
 
-  const onChange = useCallback(
-    (newValue: string) => {
-      setValue(newValue);
-    },
-    [setValue]
-  );
-
-  const onSave = useCallback(
-    () => {
-      if (metaframe.setOutputs) {
-        const newOutputs: any = {};
-        if (name.endsWith(".json")) {
-          try {
-            newOutputs[name] = JSON.parse(value);
-          } catch(err) {
-            newOutputs[name] = value;
-          }
-        } else {
-          newOutputs[name] = value;
+  const onSave = useCallback(() => {
+    setValueHashParam(localValue);
+    if (metaframe.setOutputs && name) {
+      const newOutputs: any = {};
+      if (name.endsWith(".json")) {
+        try {
+          newOutputs[name] = JSON.parse(localValue || "");
+        } catch (err) {
+          newOutputs[name] = localValue;
         }
+      } else {
+        newOutputs[name] = localValue;
+      }
+      if (isIframe()) {
         metaframe.setOutputs(newOutputs);
       }
-    },
-    [metaframe.setOutputs, value]
-  );
+    }
+  }, [metaframe.setOutputs, localValue, name, setValueHashParam]);
 
   return (
     <Box w="100%" p={2} color="white">
-      <VStack
-        spacing={2}
-        align="stretch"
-      >
-        <Flex>
-          <Box p="4" color="black">
-            Input: <Code variant="subtle" children={name} />
-          </Box>
-          <Spacer />
+      <VStack spacing={2} align="stretch">
+        <Flex alignItems="center">
+          {metaframeConfigure === "true" || !isIframe() ? (
+            <OptionsMenuButton options={appOptions} />
+          ) : null}
 
-          <Button colorScheme="blue" onClick={onSave}>Save</Button>
+          <Box p="3" color="black">
+            <Text fontSize="xm" >Name:{" "}</Text>
+          </Box>
+
+          <EditableText
+            value={name ? name : ""}
+            setValue={setName}
+          />
+
+          <Spacer pr="8px" />
+
+          <Button colorScheme="blue" onClick={onSave}>
+            {metaframeConfigure === "true" || !isIframe() ? "Save" : "Send"}
+          </Button>
         </Flex>
 
-        <AceEditor
-          // setOptions={{ useWorker: false }}
-          mode="json"
-          theme="github"
-          name="UNIQUE_ID_OF_DIV"
-          onChange={onChange}
-          editorProps={{ $blockScrolling: true }}
-          value={value}
-          width="100%"
-          // height="100%"
+        <Editor
+          mode={options?.mode || "json"}
+          setValue={setLocalValue}
+          value={localValue}
         />
       </VStack>
     </Box>
