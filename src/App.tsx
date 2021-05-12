@@ -72,7 +72,13 @@ export const App: FunctionalComponent = () => {
   // the local value changes fast from editing
   useEffect(() => {
     setLocalValue(valueHashParam || "");
-  }, [valueHashParam, setLocalValue])
+  }, [valueHashParam, setLocalValue]);
+
+  useEffect(() => {
+    if (metaframe.metaframe) {
+      metaframe.metaframe.notifyOnHashUrlChange();
+    }
+  }, [metaframe.metaframe]);
 
   // make sure the file name is up-to-date
   // either from #?name=<HashParamBase64> or from the latest input name
@@ -103,6 +109,7 @@ export const App: FunctionalComponent = () => {
     if (name !== "metapage/definition" && options?.autosend && metaframe.setOutputs && localValue && localValue.length > 0 && name && name.length > 0 && !sendOnce && isIframe()) {
         const newOutputs: any = maybeConvertJsonValues(name, localValue);
         metaframe.setOutputs(newOutputs);
+        console.log('editor metaframe.setOutputs(newOutputs)')
         setSendOnce(true);
     }
   }, [metaframe.setOutputs, localValue, name, sendOnce, setSendOnce, options]);
