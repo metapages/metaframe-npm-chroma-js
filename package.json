@@ -1,6 +1,6 @@
 {
   "name": "metaframe-editor",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": false,
   "scripts": {
     "prebuild": "npm i && ./node_modules/typescript/bin/tsc --build --verbose",
@@ -14,7 +14,7 @@
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.3.0",
     "@metapages/metaframe-hook": "^0.2.8",
-    "@metapages/metapage": "^0.5.7",
+    "@metapages/metapage": "^0.5.12",
     "ace-builds": "^1.4.12",
     "framer-motion": "^4.1.9",
     "gh-pages": "^3.1.0",
