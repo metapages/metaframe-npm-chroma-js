@@ -38,16 +38,16 @@ const appOptions: Option[] = [
     options: ["json", "javascript", "python", "sh"],
   },
   {
-    name: "autosend",
-    displayName: "Send once automatically",
-    default: true,
+    name: "noautosendonce",
+    displayName: "Only send when Save/Send is clicked",
+    default: false,
     type: "boolean",
   },
 ];
 
 type OptionBlob = {
   mode:string;
-  autosend:boolean;
+  noautosendonce:boolean;
 }
 
 export const App: FunctionalComponent = () => {
@@ -57,7 +57,7 @@ export const App: FunctionalComponent = () => {
   const [metaframeConfigure] = useHashParam("metaframe-configure");
   const [options] = useHashParamJson<OptionBlob>("options", {
     mode: "json",
-    autosend: true,
+    noautosendonce: false,
   });
 
   // Split these next two otherwise editing is too slow as it copies to/from the URL
@@ -106,10 +106,9 @@ export const App: FunctionalComponent = () => {
   useEffect(() => {
     // don't autosend metapage definitions ugh you get an ugly loop.
     // configurating it specially is cumbersome
-    if (name !== "metapage/definition" && options?.autosend && metaframe.setOutputs && localValue && localValue.length > 0 && name && name.length > 0 && !sendOnce && isIframe()) {
+    if (name !== "metapage/definition" && !options?.noautosendonce && metaframe.setOutputs && localValue && localValue.length > 0 && name && name.length > 0 && !sendOnce && isIframe()) {
         const newOutputs: any = maybeConvertJsonValues(name, localValue);
         metaframe.setOutputs(newOutputs);
-        console.log('editor metaframe.setOutputs(newOutputs)')
         setSendOnce(true);
     }
   }, [metaframe.setOutputs, localValue, name, sendOnce, setSendOnce, options]);
