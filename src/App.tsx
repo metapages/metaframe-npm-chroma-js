@@ -54,7 +54,7 @@ export const App: FunctionalComponent = () => {
   const metaframe: MetaframeObject = useMetaframe();
   const [name, setName] = useHashParamBase64("name", "");
   // Proposed way to tell metaframe: I am configuring you
-  const [metaframeConfigure] = useHashParam("metaframe-configure");
+  // const [metaframeConfigure] = useHashParam("metaframe-configure");
   const [options] = useHashParamJson<OptionBlob>("options", {
     mode: "json",
     noautosendonce: false,
@@ -73,12 +73,6 @@ export const App: FunctionalComponent = () => {
   useEffect(() => {
     setLocalValue(valueHashParam || "");
   }, [valueHashParam, setLocalValue]);
-
-  useEffect(() => {
-    if (metaframe.metaframe) {
-      metaframe.metaframe.notifyOnHashUrlChange();
-    }
-  }, [metaframe.metaframe]);
 
   // make sure the file name is up-to-date
   // either from #?name=<HashParamBase64> or from the latest input name
@@ -117,9 +111,9 @@ export const App: FunctionalComponent = () => {
     <Box w="100%" p={2} color="white">
       <VStack spacing={2} align="stretch">
         <Flex alignItems="center">
-          {metaframeConfigure === "true" || !isIframe() ? (
+          {/* {metaframeConfigure === "true" || !isIframe() ? ( */}
             <OptionsMenuButton options={appOptions} />
-          ) : null}
+          {/*  ) : null} */}
 
           <Box p="3" color="black">
             <Text fontSize="xm" >Name:{" "}</Text>
@@ -133,7 +127,8 @@ export const App: FunctionalComponent = () => {
           <Spacer pr="8px" />
 
           <Button colorScheme="blue" onClick={onSave}>
-            {metaframeConfigure === "true" || !isIframe() ? "Save" : "Send"}
+            {/* {metaframeConfigure === "true" || !isIframe() ? "Save" : "Send"} */}
+            Save
           </Button>
         </Flex>
 

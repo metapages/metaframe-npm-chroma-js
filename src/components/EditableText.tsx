@@ -77,14 +77,14 @@ export const EditableText: FunctionalComponent<{
       <HStack>
         <Box
           maxW="100%"
-          width="400px"
+          width="300px"
           p={1}
           borderWidth="4px"
           borderRadius="lg"
           overflow="hidden"
         >
-          <EditablePreview textSize="sm" minWidth="300px" textColor="black" />
-          <EditableInput minWidth="300px" textColor="black" />
+          <EditablePreview textSize="sm" width="300px" textColor="black" />
+          <EditableInput width="300px" textColor="black" />
         </Box>
         <EditableControls />
       </HStack>
