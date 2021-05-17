@@ -2,8 +2,6 @@ import { h, Fragment, FunctionalComponent } from "preact";
 import { useCallback, useEffect, useState } from "preact/hooks";
 import {
   Box,
-  Button,
-  ButtonGroup,
   Drawer,
   DrawerOverlay,
   DrawerContent,
@@ -14,7 +12,6 @@ import {
   IconButton,
   Input,
   Select,
-  Stack,
   Switch,
   Text,
 } from "@chakra-ui/react";
@@ -26,11 +23,11 @@ type OptionType = "string" | "boolean" | "option";
 export type Option = {
   name: string;
   displayName: string;
-  default?: string|boolean;
+  default?: string | boolean;
   type?: OptionType; // defaults to string
   options?: string[];
-  validator?: (val: string|boolean) => string | undefined; // undefined == 👍, string is an error message
-  map?: (val: string|boolean) => any; // convert value to proper type
+  validator?: (val: string | boolean) => string | undefined; // undefined == 👍, string is an error message
+  map?: (val: string | boolean) => any; // convert value to proper type
 };
 
 export const OptionsMenuButton: FunctionalComponent<{ options: Option[] }> = ({
@@ -57,7 +54,7 @@ export const OptionsMenuButton: FunctionalComponent<{ options: Option[] }> = ({
   );
 };
 
-type GenericOptions = Record<string, string|boolean>;
+type GenericOptions = Record<string, string | boolean>;
 
 const OptionsMenu: FunctionalComponent<{
   isOpen: boolean;
@@ -66,34 +63,31 @@ const OptionsMenu: FunctionalComponent<{
 }> = ({ isOpen, setOpen, options }) => {
   // isOpen = true; // for debugging/developing
 
-  const [optionsInHashParams, setOptionsInHashParams] = useHashParamJson<
-  GenericOptions
-  >(
-    "options",
-    Object.fromEntries(
-      options
-        .filter((o) => o.default)
-        .map((option) => [option!.name!, option!.default!])
-    )
-  );
+  const [optionsInHashParams, setOptionsInHashParams] =
+    useHashParamJson<GenericOptions>(
+      "options",
+      Object.fromEntries(
+        options
+          .filter((o) => o.default)
+          .map((option) => [option!.name!, option!.default!])
+      )
+    );
 
   const [localOptions, setLocalOptions] = useState<GenericOptions>(
     optionsInHashParams || {}
   );
-  const [errors, setErrors] = useState<Record<string, string> | undefined>(
-    undefined
-  );
+  const [errors, setErrors] =
+    useState<Record<string, string> | undefined>(undefined);
 
   const handleOnChange = useCallback(
     (event: any) => {
       const { name, value } = event.target as HTMLInputElement;
       const option = options.find((o) => o.name === name) as Option; // assume we always find one since we configured it from options
-      if (option.type === 'boolean') {
+      if (option.type === "boolean") {
         setLocalOptions({ ...localOptions, [name]: value === "1" });
       } else {
         setLocalOptions({ ...localOptions, [name]: value });
       }
-
     },
     [localOptions, setLocalOptions]
   );
@@ -107,7 +101,7 @@ const OptionsMenu: FunctionalComponent<{
     const maybeErrors: Record<string, string> = {};
     Object.keys(localOptions).forEach((key) => {
       const option: Option | undefined = options.find((o) => o.name === key);
-      if (option && option.validator && option.type !== 'boolean') {
+      if (option && option.validator && option.type !== "boolean") {
         const errorFromOption = option.validator(localOptions[key] as string);
         if (errorFromOption) {
           maybeErrors[key] = errorFromOption;
@@ -163,7 +157,7 @@ const OptionsMenu: FunctionalComponent<{
           </DrawerHeader>
           <DrawerBody>
             <Box
-              maxW="80%"
+              maxW="100%"
               p={2}
               borderWidth="4px"
               borderRadius="lg"
@@ -201,27 +195,26 @@ const OptionsMenu: FunctionalComponent<{
                 <GridItem rowSpan={1} colSpan={12}></GridItem>
                 <GridItem rowSpan={1} colSpan={10}></GridItem>
 
-                <GridItem rowSpan={0} colSpan={2}>
-                  <Stack spacing={4}>
-                    <ButtonGroup variant="outline" spacing="6">
-                      {/*
+                <GridItem rowSpan={1} colSpan={1}>
+                  {/*
                       // @ts-ignore */}
-                      <IconButton
-                        size="lg"
-                        color="red"
-                        icon={(<CloseIcon />) as any}
-                        onClick={onClose}
-                      />
-                      {/*
+                  <IconButton
+                    size="lg"
+                    color="red"
+                    icon={(<CloseIcon />) as any}
+                    onClick={onClose}
+                  />
+                </GridItem>
+
+                <GridItem rowSpan={1} colSpan={1}>
+                  {/*
                       // @ts-ignore */}
-                      <IconButton
-                        size="lg"
-                        color="green"
-                        icon={(<CheckIcon />) as any}
-                        onClick={onCloseAndAccept}
-                      />
-                    </ButtonGroup>
-                  </Stack>
+                  <IconButton
+                    size="lg"
+                    color="green"
+                    icon={(<CheckIcon />) as any}
+                    onClick={onCloseAndAccept}
+                  />
                 </GridItem>
               </Grid>
             </Box>
