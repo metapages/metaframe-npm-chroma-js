@@ -1,5 +1,4 @@
 import { h, FunctionalComponent } from "preact";
-import { useCallback, useEffect, useState } from "preact/hooks";
 import { config } from "ace-builds";
 config.set(
   "basePath",
@@ -39,16 +38,6 @@ export const Editor: FunctionalComponent<EditorProps> = ({
   value,
   setValue,
 }) => {
-
-  // const [ localValue, setLocalValue] = useState<string>(value);
-
-  // const onChange = useCallback(
-  //   (newValue: string) => {
-  //     setValue(newValue);
-  //   },
-  //   [setValue]
-  // );
-
   return (
     <AceEditor
       // setOptions={{ useWorker: false }}
@@ -59,7 +48,7 @@ export const Editor: FunctionalComponent<EditorProps> = ({
       editorProps={{ $blockScrolling: true }}
       value={value}
       width="100%"
-      // height="100%"
+      setOptions={{ maxLines: Infinity }} //https://github.com/securingsincity/react-ace/issues/415
     />
   );
 };
