@@ -10,9 +10,6 @@ import {
   useEditableControls,
 } from "@chakra-ui/react";
 import { CheckIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
-import {
-  useWindowWidth,
-} from "@react-hook/window-size";
 
 export const EditableText: FunctionalComponent<{
   value: string | undefined;
@@ -20,7 +17,6 @@ export const EditableText: FunctionalComponent<{
   defaultValue?: string | undefined;
 }> = ({ defaultValue, value, setValue }) => {
   const [localValue, setLocalValue] = useState<string | undefined>(value);
-  const windowWidth = useWindowWidth();
 
   useEffect(() => {
     setLocalValue(value);
