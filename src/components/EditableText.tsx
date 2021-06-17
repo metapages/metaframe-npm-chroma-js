@@ -10,12 +10,17 @@ import {
   useEditableControls,
 } from "@chakra-ui/react";
 import { CheckIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
+import {
+  useWindowWidth,
+} from "@react-hook/window-size";
 
 export const EditableText: FunctionalComponent<{
   value: string | undefined;
   setValue: (v: string | undefined) => void;
-}> = ({ value, setValue }) => {
+  defaultValue?: string | undefined;
+}> = ({ defaultValue, value, setValue }) => {
   const [localValue, setLocalValue] = useState<string | undefined>(value);
+  const windowWidth = useWindowWidth();
 
   useEffect(() => {
     setLocalValue(value);
@@ -68,6 +73,7 @@ export const EditableText: FunctionalComponent<{
   return (
     <Editable
       textAlign="left"
+      defaultValue={defaultValue}
       value={localValue ? localValue : undefined}
       fontSize="lg"
       isPreviewFocusable={false}
@@ -77,14 +83,15 @@ export const EditableText: FunctionalComponent<{
       <HStack>
         <Box
           maxW="100%"
-          width="300px"
+          width="100%"
+          minW={"250px"}
           p={1}
           borderWidth="4px"
           borderRadius="lg"
           overflow="hidden"
         >
-          <EditablePreview textSize="sm" width="300px" textColor="black" />
-          <EditableInput width="300px" textColor="black" />
+          <EditablePreview textSize="sm" width="100%" textColor="black" />
+          <EditableInput width="100%" textColor="black" />
         </Box>
         <EditableControls />
       </HStack>

@@ -13,8 +13,8 @@ import {
   Box,
   Button,
   Flex,
+  HStack,
   Spacer,
-  Text,
   VStack,
 } from "@chakra-ui/react";
 import {
@@ -22,7 +22,6 @@ import {
   useMetaframe,
   useHashParamJson,
   useHashParamBase64,
-  useHashParam,
 } from "@metapages/metaframe-hook";
 import { Editor } from "./components/Editor";
 import { Option, OptionsMenuButton } from "./components/OptionsMenu";
@@ -46,9 +45,9 @@ const appOptions: Option[] = [
 ];
 
 type OptionBlob = {
-  mode:string;
-  noautosendonce:boolean;
-}
+  mode: string;
+  noautosendonce: boolean;
+};
 
 export const App: FunctionalComponent = () => {
   const metaframe: MetaframeObject = useMetaframe();
@@ -61,11 +60,14 @@ export const App: FunctionalComponent = () => {
   });
 
   // Split these next two otherwise editing is too slow as it copies to/from the URL
-  const [valueHashParam, setValueHashParam] = useHashParamBase64("text", undefined);
+  const [valueHashParam, setValueHashParam] = useHashParamBase64(
+    "text",
+    undefined
+  );
   // Use a local copy because directly using hash params is too slow for typing
-  const [ localValue, setLocalValue] = useState<string>(valueHashParam || "");
+  const [localValue, setLocalValue] = useState<string>(valueHashParam || "");
   // Send the text at least once, even if the user doesn't click "Send"
-  const [ sendOnce, setSendOnce ] = useState<boolean>(false);
+  const [sendOnce, setSendOnce] = useState<boolean>(false);
 
   // source of truth: the URL param #?text=<HashParamBase64>
   // if that changes, set the local value
@@ -100,34 +102,40 @@ export const App: FunctionalComponent = () => {
   useEffect(() => {
     // don't autosend metapage definitions ugh you get an ugly loop.
     // configurating it specially is cumbersome
-    if (name !== "metapage/definition" && !options?.noautosendonce && metaframe.setOutputs && localValue && localValue.length > 0 && name && name.length > 0 && !sendOnce && isIframe()) {
-        const newOutputs: any = maybeConvertJsonValues(name, localValue);
-        metaframe.setOutputs(newOutputs);
-        setSendOnce(true);
+    if (
+      name !== "metapage/definition" &&
+      !options?.noautosendonce &&
+      metaframe.setOutputs &&
+      localValue &&
+      localValue.length > 0 &&
+      name &&
+      name.length > 0 &&
+      !sendOnce &&
+      isIframe()
+    ) {
+      const newOutputs: any = maybeConvertJsonValues(name, localValue);
+      metaframe.setOutputs(newOutputs);
+      setSendOnce(true);
     }
   }, [metaframe.setOutputs, localValue, name, sendOnce, setSendOnce, options]);
 
   return (
-    <Box w="100%" p={2} color="white">
+    <Box w="100%" p={2}>
       <VStack spacing={2} align="stretch">
         <Flex alignItems="center">
-          {/* {metaframeConfigure === "true" || !isIframe() ? ( */}
+          <HStack>
+            <EditableText
+              value={name ? name : ""}
+              setValue={setName}
+              defaultValue="Name"
+            />
+
             <OptionsMenuButton options={appOptions} />
-          {/*  ) : null} */}
+          </HStack>
 
-          <Box p="3" color="black">
-            <Text fontSize="xm" >Name:{" "}</Text>
-          </Box>
-
-          <EditableText
-            value={name ? name : ""}
-            setValue={setName}
-          />
-
-          <Spacer pr="8px" />
+          <Spacer />
 
           <Button colorScheme="blue" onClick={onSave}>
-            {/* {metaframeConfigure === "true" || !isIframe() ? "Save" : "Send"} */}
             Save
           </Button>
         </Flex>
@@ -142,7 +150,7 @@ export const App: FunctionalComponent = () => {
   );
 };
 
-const maybeConvertJsonValues = (name:string, text:string) => {
+const maybeConvertJsonValues = (name: string, text: string) => {
   const newOutputs: any = {};
   if (name.endsWith(".json")) {
     try {
@@ -154,4 +162,4 @@ const maybeConvertJsonValues = (name:string, text:string) => {
     newOutputs[name] = text;
   }
   return newOutputs;
-}
+};
