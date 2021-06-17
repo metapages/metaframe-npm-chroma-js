@@ -37,11 +37,13 @@ dev: _ensure_npm_modules _mkcert (_tsc "--build --verbose")
         {{parcel}} serve \
                         --cert .certs/${APP_FQDN}.pem \
                         --key  .certs/${APP_FQDN}-key.pem \
+                        --no-hmr \
                         --port ${APP_PORT} \
                         --host ${APP_FQDN} \
-                        --hmr-port ${PORT_HMR} \
                         public/index.html --open
     fi
+#                         --hmr-port ${PORT_HMR} \
+
 
 # deploy to gh-pages branch
 publish: build
