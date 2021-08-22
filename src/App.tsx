@@ -23,10 +23,12 @@ import {
   useHashParamJson,
   useHashParamBase64,
 } from "@metapages/metaframe-hook";
+import {
+  isIframe,
+} from "@metapages/metapage";
 import { Editor } from "./components/Editor";
 import { Option, OptionsMenuButton } from "./components/OptionsMenu";
 import { EditableText } from "./components/EditableText";
-import { isIframe } from "./utils/util";
 
 const appOptions: Option[] = [
   {
