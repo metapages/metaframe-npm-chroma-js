@@ -68,9 +68,8 @@ _dev_container: _ensure_npm_modules (_tsc "--build")
 watch:
     watchexec -w src -w tsconfig.json -w package.json -w vite.config.ts -- just build
 
-# _ensureGitPorcelain
 # Publish site to github -pages, including current ALL previous versions
-publish:
+publish: _ensureGitPorcelain
     #!/usr/bin/env bash
     set -euo pipefail
     # Mostly CURRENT_BRANCH should be main, but maybe you are testing on a different branch
