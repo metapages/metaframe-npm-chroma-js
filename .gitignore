@@ -1,12 +1,16 @@
+# macos junk
+.DS_Store
 # local mkcert generated certificates for https
 .certs
 # never commit this
 .env
-# parcel
-.cache
 # I'd like to commit this but probably not a good idea
 .vscode
 # compiled website
 dist
 # dependencies
 node_modules
+# just/config/startup temp files
+**/.tmp
+# gh-pages publish folder, ignored, but when publishing will force
+docs

@@ -1,4 +1,4 @@
-import { h, Fragment, FunctionalComponent } from "preact";
+import { FunctionalComponent } from "preact";
 import { useCallback, useEffect, useState } from "preact/hooks";
 import {
   Box,
@@ -40,7 +40,7 @@ export const OptionsMenuButton: FunctionalComponent<{ options: Option[] }> = ({
   }, [open]);
 
   return (
-    <Fragment>
+    <>
       <IconButton
         verticalAlign="top"
         aria-label="Metaframe settings"
@@ -50,7 +50,7 @@ export const OptionsMenuButton: FunctionalComponent<{ options: Option[] }> = ({
         onClick={onClick}
       />
       <OptionsMenu isOpen={open} setOpen={setOpen} options={options} />
-    </Fragment>
+    </>
   );
 };
 
@@ -165,7 +165,7 @@ const OptionsMenu: FunctionalComponent<{
             >
               <Grid templateColumns="repeat(12, 1fr)" gap={6}>
                 {options.map((option) => (
-                  <Fragment>
+                  <>
                     <GridItem rowSpan={1} colSpan={4}>
                       <Box
                         w="100%"
@@ -187,7 +187,7 @@ const OptionsMenu: FunctionalComponent<{
                         handleOnChange
                       )}
                     </GridItem>
-                  </Fragment>
+                  </>
                 ))}
 
                 <GridItem rowSpan={1} colSpan={12}></GridItem>

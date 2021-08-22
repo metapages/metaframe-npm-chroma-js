@@ -1,7 +1,8 @@
-**/.cache
-**/node_modules
-**/dist
-**/.env
+**/.certs
 **/.dockerignore
+**/.env
 **/.gitignore
+**/.tmp
+**/dist
 **/Dockerfile
+**/node_modules

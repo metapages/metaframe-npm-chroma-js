@@ -1,4 +1,4 @@
-import { h, Fragment, FunctionalComponent } from "preact";
+import { FunctionalComponent } from "preact";
 import { useCallback, useEffect, useState } from "preact/hooks";
 import {
   Box,
@@ -31,7 +31,7 @@ export const EditableText: FunctionalComponent<{
     } = useEditableControls();
 
     return isEditing ? (
-      <Fragment>
+      <>
         {/*
             // @ts-ignore */}
         <IconButton
@@ -48,7 +48,7 @@ export const EditableText: FunctionalComponent<{
           icon={(<CloseIcon />) as any}
           {...getCancelButtonProps()}
         />
-      </Fragment>
+      </>
     ) : (
       // @ts-ignore
       <IconButton

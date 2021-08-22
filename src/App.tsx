@@ -7,7 +7,7 @@
  *  The save button sends the editor content to the same input name
  */
 
-import { h, FunctionalComponent } from "preact";
+import { FunctionalComponent } from "preact";
 import { useEffect, useState, useCallback } from "preact/hooks";
 import {
   Box,
@@ -42,11 +42,19 @@ const appOptions: Option[] = [
     default: false,
     type: "boolean",
   },
+  {
+    name: "theme",
+    displayName: "Light/Dark theme",
+    default: "light",
+    type: "option",
+    options: ["light", "vs-dark"],
+  },
 ];
 
 type OptionBlob = {
   mode: string;
   noautosendonce: boolean;
+  theme: string;
 };
 
 export const App: FunctionalComponent = () => {
@@ -57,6 +65,7 @@ export const App: FunctionalComponent = () => {
   const [options] = useHashParamJson<OptionBlob>("options", {
     mode: "json",
     noautosendonce: false,
+    theme: "light",
   });
 
   // Split these next two otherwise editing is too slow as it copies to/from the URL
@@ -65,7 +74,7 @@ export const App: FunctionalComponent = () => {
     undefined
   );
   // Use a local copy because directly using hash params is too slow for typing
-  const [localValue, setLocalValue] = useState<string>(valueHashParam || "");
+  const [localValue, setLocalValue] = useState<string|undefined>(valueHashParam || "");
   // Send the text at least once, even if the user doesn't click "Send"
   const [sendOnce, setSendOnce] = useState<boolean>(false);
 
@@ -92,7 +101,7 @@ export const App: FunctionalComponent = () => {
 
   const onSave = useCallback(() => {
     setValueHashParam(localValue);
-    if (metaframe.setOutputs && name && name.length > 0 && isIframe()) {
+    if (metaframe.setOutputs && name && name.length > 0 && isIframe() && localValue) {
       const newOutputs: any = maybeConvertJsonValues(name, localValue);
       metaframe.setOutputs(newOutputs);
     }
@@ -142,6 +151,7 @@ export const App: FunctionalComponent = () => {
 
         <Editor
           mode={options?.mode || "json"}
+          theme={options?.theme || "light"}
           setValue={setLocalValue}
           value={localValue}
         />
