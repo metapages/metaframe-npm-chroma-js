@@ -46,7 +46,7 @@ export const OptionsMenuButton: FunctionalComponent<{ options: Option[] }> = ({
         aria-label="Metaframe settings"
         // @ts-ignore
         icon={<SettingsIcon />}
-        size="lg"
+        // size="lg"
         onClick={onClick}
       />
       <OptionsMenu isOpen={open} setOpen={setOpen} options={options} />

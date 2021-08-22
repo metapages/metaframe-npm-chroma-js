@@ -105,7 +105,6 @@ _tsc +args="":
 # DEV: generate TLS certs for HTTPS over localhost https://blog.filippo.io/mkcert-valid-https-certificates-for-localhost/
 _mkcert:
     #!/usr/bin/env bash
-    echo -e "🚪 Check local mkcert certificates and /etc/hosts with APP_FQDN=${APP_FQDN}"
     if [ -n "$CI" ]; then
         echo "CI=$CI ∴ skipping mkcert"
         exit 0
@@ -121,12 +120,13 @@ _mkcert:
     fi
     if ! cat /etc/hosts | grep "{{APP_FQDN}}" &> /dev/null; then
         echo -e "";
-        echo -e "💥Add to /etc/hosts: 'sudo vi /etc/hosts'💥";
+        echo -e "💥 Add below to /etc/hosts with this command: {{bold}}sudo vi /etc/hosts{{normal}} 💥";
         echo -e "";
-        echo -e "      {{bold}}127.0.0.1     {{APP_FQDN}}{{normal}}";
+        echo -e "{{bold}}127.0.0.1       {{APP_FQDN}}{{normal}}";
         echo -e "";
         exit 1;
     fi
+    echo -e "✅ Local mkcert certificates and /etc/hosts contains: 127.0.0.1       {{APP_FQDN}}"
 
 @_ensure_npm_modules:
     if [ ! -f "{{tsc}}" ]; then npm i; fi

@@ -19,12 +19,12 @@ export const Editor: FunctionalComponent<EditorProps> = ({
       defaultLanguage={mode}
       theme={theme}
       options={{
-        minimap: {enabled:false},
+        minimap: { enabled: false },
       }}
       onChange={setValue}
       value={value}
       width="100%"
-      height="90vh"
+      height="99vh"
     />
   );
 };

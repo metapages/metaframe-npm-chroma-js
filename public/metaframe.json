@@ -1,12 +1,12 @@
 {
 	"version": "0.3",
 	"metadata": {
-		"title": "Edit"
+		"title": "Run javascript/typescript"
 	},
 	"inputs": {
-		"metapage/definition": {}
+		"script.js": {}
 	},
     "outputs": {
-		"metapage/definition": {}
+		"execution": {}
 	}
 }
