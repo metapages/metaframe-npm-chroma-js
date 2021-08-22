@@ -2,7 +2,7 @@
 
 ## Usage documentation
 
-https://metapages.github.io/metaframe-javascript/
+Live: https://metapages.github.io/metaframe-javascript/
 
 [./public/README.md](./public/README.md)
 
