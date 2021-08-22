@@ -68,8 +68,9 @@ _dev_container: _ensure_npm_modules (_tsc "--build")
 watch:
     watchexec -w src -w tsconfig.json -w package.json -w vite.config.ts -- just build
 
+# _ensureGitPorcelain
 # Publish site to github -pages, including current ALL previous versions
-publish: _ensureGitPorcelain
+publish:
     #!/usr/bin/env bash
     set -euo pipefail
     # Mostly CURRENT_BRANCH should be main, but maybe you are testing on a different branch
@@ -80,11 +81,9 @@ publish: _ensureGitPorcelain
     git checkout gh-pages
     # Prefer changes in CURRENT_BRANCH, not our incoming gh-pages rebase
     git rebase -Xours ${CURRENT_BRANCH}
+    # Build new versions. Need to do two builds because paths might be hardwired
+    just build
     just build ./v$(cat package.json | jq -r .version)
-    # Copy the new build to the root
-    find docs/ -maxdepth 1 -type f -exec rm "{}" \;
-    rm -rf docs/assets
-    cp -r docs/v$(cat package.json | jq -r .version)/* docs/
     # Now commit and push
     git add --all --force docs
     git commit -m "site v$(cat package.json | jq -r .version)"
