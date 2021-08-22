@@ -11,7 +11,7 @@ import {
 import { QuestionIcon } from "@chakra-ui/icons";
 
 export const ButtonHelp: FunctionalComponent<{ url?: string }> = ({ url }) => {
-  const [open, setOpen] = useState<boolean>(true);
+  const [open, setOpen] = useState<boolean>(false);
 
   const onClick = useCallback(() => {
     setOpen(!open);
