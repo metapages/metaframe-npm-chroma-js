@@ -141,7 +141,7 @@ _mkcert:
 ####################################################################################
 # Hoist into a docker container with all require CLI tools installed
 @_docker +args="bash": _build_docker
-    echo -e "🌱 Entering docker context: {{bold}}{{DOCKER_IMAGE_PREFIX}}:{{DOCKER_TAG}} from <cloud/>Dockerfile 🚪🚪{{normal}}"
+    echo -e "🌱 Entering docker context: {{bold}}{{DOCKER_IMAGE_PREFIX}}:{{DOCKER_TAG}} from </>Dockerfile 🚪🚪{{normal}}"
     mkdir -p {{ROOT}}/.tmp
     touch {{ROOT}}/.tmp/.bash_history
     export WORKSPACE=/repo && \
