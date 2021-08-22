@@ -1,5 +1,22 @@
 # Metaframe: edit code and scripts
 
-This metaframe edits code and scripts and stores the text in the hash part of the URL
+## Usage documentation
 
-So don't make the scripts too big! If you need huge files, save in the docker image.
+https://metapages.github.io/metaframe-javascript/
+
+[./public/README.md](./public/README.md)
+
+## Development documentation
+
+Prerequisites:
+ - `just`: https://github.com/casey/just#installation
+ - `docker`: https://docs.docker.com/get-docker/
+
+
+### Command ops
+
+Command Ops Menu:
+
+    just
+
+And go from there.
