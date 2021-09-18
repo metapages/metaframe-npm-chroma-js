@@ -8,18 +8,19 @@ import {
   IconButton,
   DrawerCloseButton,
 } from "@chakra-ui/react";
+import { isIframe } from "@metapages/metaframe-hook";
 import { QuestionIcon } from "@chakra-ui/icons";
 
 export const ButtonHelp: FunctionalComponent<{ url?: string }> = ({ url }) => {
-  const [open, setOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(isIframe() ? false : true);
+
+  url = url
+    ? url
+    : `${window.location.origin}${window.location.pathname}/README.md`;
 
   const onClick = useCallback(() => {
     setOpen(!open);
   }, [open]);
-
-  url = url
-    ? url
-    : `${window.location.origin}${window.location.pathname}README.md`;
 
   return (
     <>
@@ -28,7 +29,7 @@ export const ButtonHelp: FunctionalComponent<{ url?: string }> = ({ url }) => {
         aria-label="Help"
         // @ts-ignore
         icon={<QuestionIcon />}
-        // size="lg"
+        size="lg"
         onClick={onClick}
         mr="4"
       />
@@ -62,7 +63,7 @@ const HelpPanel: FunctionalComponent<{
     >
       <DrawerOverlay>
         <DrawerContent>
-          <DrawerCloseButton size="lg" colorScheme="blue.500" bg="gray.100" />
+          <DrawerCloseButton size="lg" bg="gray.100" />
           <DrawerBody>
             <iframe width="100%" height="100%" src={iframeUrl} />
           </DrawerBody>

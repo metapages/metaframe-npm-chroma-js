@@ -1,22 +1,4 @@
-# Metaframe: edit code and scripts
+# [Metaframe](https://metapages.org/) coordinated git repository + npm module + github-pages site
 
-## Usage documentation
-
-Live: https://metapages.github.io/metaframe-javascript/
-
-[./public/README.md](./public/README.md)
-
-## Development documentation
-
-Prerequisites:
- - `just`: https://github.com/casey/just#installation
- - `docker`: https://docs.docker.com/get-docker/
-
-
-### Command ops
-
-Command Ops Menu:
-
-    just
-
-And go from there.
+User docs: [./public/README.md](./public/README.md)
+Developer docs: [./README-developer.md](./README-developer.md)

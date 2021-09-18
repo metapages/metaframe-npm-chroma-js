@@ -1,6 +1,6 @@
 import { render } from "preact";
-import { ChakraProvider } from "@chakra-ui/react";
 import { WithMetaframe } from "@metapages/metaframe-hook";
+import { ChakraProvider } from "@chakra-ui/react";
 import { App } from "./App";
 
 render(
