@@ -29,6 +29,7 @@ import {
 import { Editor } from "./components/Editor";
 import { Option, OptionsMenuButton } from "./components/OptionsMenu";
 import { EditableText } from "./components/EditableText";
+import { ButtonHelp } from './components/ButtonHelp';
 
 const appOptions: Option[] = [
   {
@@ -142,6 +143,7 @@ export const App: FunctionalComponent = () => {
             />
 
             <OptionsMenuButton options={appOptions} />
+            <ButtonHelp />
           </HStack>
 
           <Spacer />
@@ -149,6 +151,7 @@ export const App: FunctionalComponent = () => {
           <Button colorScheme="blue" onClick={onSave}>
             Save
           </Button>
+
         </Flex>
 
         <Editor

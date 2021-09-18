@@ -1,5 +1,4 @@
-# Metaframe: edit code and scripts
+# [Metaframe](https://metapages.org/) coordinated git repository + npm module + github-pages site
 
-This metaframe edits code and scripts and stores the text in the hash part of the URL
-
-So don't make the scripts too big! If you need huge files, save in the docker image.
+User docs: [./public/README.md](./public/README.md)
+Developer docs: [./README-developer.md](./README-developer.md)
