@@ -70,8 +70,8 @@ build: (_tsc "--build") _browser_assets_build _npm_build
 # Test: currently bare minimum: only building. Need proper test harness.
 @test: _npm_build
 
-# Publish to npm and github pages.
-publish npmversionargs="patch": _ensureGitPorcelain test (_npm_version npmversionargs) _npm_publish _githubpages_publish
+# Publish to github pages.
+publish npmversionargs="patch": _ensureGitPorcelain test (_npm_version npmversionargs) _githubpages_publish
     @# Push the tags up
     git push origin v$(cat package.json | jq -r '.version')
 
