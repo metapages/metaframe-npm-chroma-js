@@ -29,7 +29,7 @@ export const ButtonHelp: FunctionalComponent<{ url?: string }> = ({ url }) => {
         aria-label="Help"
         // @ts-ignore
         icon={<QuestionIcon />}
-        size="lg"
+        size="md"
         onClick={onClick}
         mr="4"
       />

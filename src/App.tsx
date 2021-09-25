@@ -24,19 +24,6 @@ import { ButtonHelp } from "./components/ButtonHelp";
 
 const appOptions: Option[] = [
   {
-    name: "mode",
-    displayName: "Editor code mode",
-    default: "json",
-    type: "option",
-    options: ["json", "javascript", "python", "sh"],
-  },
-  {
-    name: "noautorun",
-    displayName: "Only run when Run is clicked",
-    default: false,
-    type: "boolean",
-  },
-  {
     name: "theme",
     displayName: "Light/Dark theme",
     default: "light",
@@ -52,8 +39,6 @@ const appOptions: Option[] = [
 ];
 
 type OptionBlob = {
-  mode: string;
-  noautorun: boolean;
   theme: string;
   hideeditor: boolean;
 };
@@ -61,8 +46,6 @@ type OptionBlob = {
 export const App: FunctionalComponent = () => {
   // metaframe configuration
   const [options] = useHashParamJson<OptionBlob>("options", {
-    mode: "json",
-    noautorun: false,
     theme: "light",
     hideeditor: false,
   });
@@ -106,7 +89,7 @@ export const App: FunctionalComponent = () => {
         <HStack spacing={2} alignItems="flex-start">
           <Box w="70%">
             <Editor
-              mode={options?.mode || "json"}
+              mode="javascript"
               theme={options?.theme || "light"}
               setValue={setCodeInStore}
               value={codeInStore}
