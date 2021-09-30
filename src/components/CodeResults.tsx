@@ -5,14 +5,14 @@ import {
   AlertTitle,
   AlertDescription,
 } from "@chakra-ui/react";
-import { useStore } from "../store";
+import { useStore, Mode } from "../store";
 import { BeatLoader } from "react-spinners";
 
 export const CodeResults: FunctionalComponent = () => {
-  const running = useStore((state) => state.running);
+  const mode = useStore((state) => state.mode);
   const result = useStore((state) => state.result);
 
-  if (running) {
+  if (Mode.Running === mode) {
     return <BeatLoader size={8} color="blue" />;
   }
   if (!result) {

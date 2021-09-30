@@ -7,21 +7,28 @@ export type MessagePayload = {
   messages?: string[];
 };
 
+export enum Mode {
+  Start,
+  Editing,
+  Running,
+  Finished,
+}
+
 export type StoreState = {
   code: string | undefined;
   result: CodeResult<any> | undefined;
-  running: boolean;
+  mode: Mode;
   setCode: (code: string | undefined) => void;
   setResult: (result: CodeResult<any> | undefined) => void;
-  setRunning: (running: boolean) => void;
+  setMode: (mode: Mode) => void;
 };
 
 export const useStore = create<StoreState>((set) => ({
   code: undefined,
   result: undefined,
-  running: false,
+  mode: Mode.Start,
   setCode: (code: string | undefined) => set((state) => ({ code })),
   setResult: (result: CodeResult<any> | undefined) =>
     set((state) => ({ result })),
-  setRunning: (running: boolean) => set((state) => ({ running })),
+  setMode: (mode: Mode) => set((state) => ({ mode })),
 }));
