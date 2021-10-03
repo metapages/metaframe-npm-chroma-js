@@ -41,7 +41,7 @@ export const ButtonRun: FunctionalComponent = () => {
         break;
     }
   }, [
-    metaframe.setOutputs,
+    metaframe.metaframe,
     codeInStore,
     valueHashParam,
     setValueHashParam,
