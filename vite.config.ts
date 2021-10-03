@@ -40,7 +40,7 @@ export default defineConfig(({ command, mode }) => ({
     fragment: "Fragment",
   },
   // this is really stupid this should not be necessary
-  plugins: [(preact as any).default()],
+  plugins: [preact()],
   build: {
     outDir: `docs/${BUILD_SUB_DIR}`,
     target: "esnext",
