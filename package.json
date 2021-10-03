@@ -21,7 +21,7 @@
     "@chakra-ui/react": "^1.6.5",
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
-    "@metapages/metaframe-hook": "^0.6.12",
+    "@metapages/metaframe-hook": "^0.6.15",
     "@metapages/metapage": "^0.8.4",
     "@monaco-editor/react": "^4.2.2",
     "framer-motion": "^4.1.17",
