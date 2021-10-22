@@ -2,6 +2,8 @@ import { useCallback, useEffect } from "preact/hooks";
 import { execJsCode } from "../hooks/codeHooks";
 import { Mode, useStore } from "../store";
 import { useMetaframe } from "@metapages/metaframe-hook";
+import * as hashParamUtils from "@metapages/metaframe-hook";
+import chroma from 'chroma-js';
 
 // Exports lazy code executor
 export const useExecuteCodeWithMetaframe: () => [
@@ -40,6 +42,8 @@ export const useExecuteCodeWithMetaframe: () => [
       try {
         const result = await execJsCode(code, {
           metaframe: metaframeObject.metaframe,
+          chroma,
+          HASHTOOLS: hashParamUtils,
         });
         setResult(result);
       } catch (err) {
