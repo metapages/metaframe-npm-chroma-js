@@ -14,7 +14,11 @@
   "main": "dist/index.js",
   "homepage": "https://github.com/metapages/metaframe-javascript/tree/main/docs#readme",
   "scripts": {
-    "note": "echo 'use just. See README.md'"
+    "preinstall": "npm set progress=false && npm set audit false && npm config set fund false",
+    "start": "vite",
+    "prebuild": "./node_modules/typescript/bin/tsc --build",
+    "build": "vite build",
+    "serve": "vite preview"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.0.15",
@@ -38,6 +42,9 @@
     "@types/react-router-dom": "^5.1.7",
     "typescript": "^4.1.5",
     "vite": "^2.6.2"
+  },
+  "engines": {
+    "node": "14.x"
   },
   "browserslist": {
     "production": [
